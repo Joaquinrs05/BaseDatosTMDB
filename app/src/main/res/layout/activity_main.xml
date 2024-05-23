@@ -8,6 +8,38 @@
     android:background="@color/black"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/llButtons"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/rvMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMainTitle"
+        app:layout_constraintVertical_weight="1">
+
+        <Button
+            android:id="@+id/btSearchMovies"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Movies"
+            android:textColor="@color/black"
+            app:backgroundTint="#CCFF00" />
+
+        <Button
+            android:id="@+id/btSearchSeries"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Series"
+            android:textColor="@color/black"
+            app:backgroundTint="#FFCC00" />
+
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tvMainTitle"
         android:layout_width="match_parent"
@@ -23,35 +55,42 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
-        android:id="@+id/llButtons"
+        android:id="@+id/botones"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintVertical_weight="1"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/rvMain"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMainTitle"
-        >
-        <Button
-            android:id="@+id/btSearchMovies"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            app:backgroundTint="#CCFF00"
-            android:textColor="@color/black"
-            android:text="Movies"
-             />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_weight="1">
+
 
         <Button
-            android:id="@+id/btSearchSeries"
+            android:id="@+id/botonatras"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            app:backgroundTint="#FFCC00"
-            android:textColor="@color/black"
             android:layout_height="match_parent"
-            android:text="Series"
-            />
+            android:layout_weight="1"
+            android:text="atras"
+            android:textColor="@color/black"
+            app:backgroundTint="#CCFF00" />
+
+        <TextView
+            android:id="@+id/Pagina"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Pag.."
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/botonsiguiente"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="siguiente"
+            android:textColor="@color/black"
+            app:backgroundTint="#FFCC00" />
 
 
     </LinearLayout>
@@ -64,8 +103,66 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llButtons"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@id/botones"/>
 
+    <Button
+        android:id="@+id/rojo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Rojo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rvMain"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
+    <Button
+        android:id="@+id/verde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="16dp"
+        android:text="verde"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.868"
+        app:layout_constraintStart_toEndOf="@+id/rvMain"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
+
+    <Button
+        android:id="@+id/total"
+        android:layout_width="169dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="1dp"
+        android:text="Paginas"
+        app:layout_constraintBottom_toTopOf="@+id/botones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvMain"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/retrocedertres"
+        android:layout_width="110dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="64dp"
+        android:text="-3"
+        app:layout_constraintBottom_toTopOf="@+id/botones"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/avanzartres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:text="+3"
+        app:layout_constraintBottom_toTopOf="@+id/botones"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="315dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

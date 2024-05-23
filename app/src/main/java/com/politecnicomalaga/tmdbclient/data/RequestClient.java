@@ -1,3 +1,4 @@
+
 package com.politecnicomalaga.tmdbclient.data;
 
 import com.google.gson.Gson;
@@ -17,20 +18,21 @@ public class RequestClient {
 
     //IMAGES:
     /*
-    *    https://image.tmdb.org/t/p/w500/h4FuqnkBrZ6Wxi4TEeB99QvL590.jpg
-    *    el w500 significa de ancho 500px. Por defecto las fotos son formato 2x3.
-    *    Es decir, con width 500, el height es 750
-    *
-    * */
+     *    https://image.tmdb.org/t/p/w500/h4FuqnkBrZ6Wxi4TEeB99QvL590.jpg
+     *    el w500 significa de ancho 500px. Por defecto las fotos son formato 2x3.
+     *    Es decir, con width 500, el height es 750
+     *
+     * */
 
     private static final String URL = "https://api.themoviedb.org/3/search/movie?query=%query%&include_adult=false&language=en-US&page=1";
-    private static final String URLAllMovies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200";
-    private static final String URLAllSeries = "https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200";
+    private static final String URLAllMovies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=*p*&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200";
+    private static final String URLAllSeries = "https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=*p*&sort_by=vote_average.desc&vote_count.gte=200";
 
 
     //Atributos
     private boolean error;
     private List<MovieSerieItem> listData;
+    private MovieResultSet movieResultSet;
     private MoviesViewModel vmInstance;
 
     //Vamos a distinguir tres tipos de búsquedas, mejores pelis, mejores series, pelis/series con título que contenga
@@ -50,7 +52,7 @@ public class RequestClient {
     }
 
     //Método usado para seleccionar el tipo de búsqueda que pediremos a TMDB
-    public void getDataFromRESTAPI(TipoBusqueda tipo, String query) {
+    public void getDataFromRESTAPI(TipoBusqueda tipo, String query, int pagina) {
         //Reseteamos el modo error para que no se guarden "errores" previos
         error = false;
         //Instanciamos un objeto de acceso a datos, el que sabe hacer request de los datos
@@ -58,9 +60,9 @@ public class RequestClient {
         error = false;
         String queryURL;
         if (tipo == TipoBusqueda.MOVIES) {
-            queryURL = URLAllMovies;
+            queryURL = URLAllMovies.replace("*p*", String.valueOf(pagina));
         } else if (tipo == TipoBusqueda.SERIES) {
-            queryURL = URLAllSeries;
+            queryURL = URLAllSeries.replace("*p*", String.valueOf(pagina));
         } else
             queryURL = URL.replace("%query%",query);
 
@@ -78,7 +80,7 @@ public class RequestClient {
 
         //del MovieResultSet nos interesa por ahora la lista de pelis/series
         listData = Arrays.asList(result.getResults());
-
+        movieResultSet = result;
         //Notificamos al viewmodel
         this.vmInstance.setData();
     }
@@ -93,6 +95,10 @@ public class RequestClient {
 
     public List<MovieSerieItem> getListData() {
         return listData;
+    }
+
+    public MovieResultSet getMovieResultSet() {
+        return movieResultSet;
     }
 }
 

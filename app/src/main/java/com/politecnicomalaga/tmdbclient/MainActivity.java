@@ -1,8 +1,10 @@
 package com.politecnicomalaga.tmdbclient;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +21,6 @@ import com.politecnicomalaga.tmdbclient.data.RequestClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Método onCreate: es el primero que se ejecuta en una app android, en una activity (pantalla)
-    //Siempre se empieza a programar después de las líneas "auto" que inserta el IDE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,64 +32,76 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
-        //A partir de aquí es nuestro código. Esta parte cambiará dependiendo de la app a programar
-        //Init components. Main Buttons and RecyclerView
-
-        //Obtener el "controlador" entre el recyclerview y el modelo
-        //Es necesario usar un LOQUESEAViewModel, una clase que hereda de ViewModel (Android)
-        //para garantizar que los elementos que se muestran en la pantalla (Activity, en sus views)
-        //no se eliminan de la RAM cuando se preduce un pause, stop o destroy por parte del S.O.
-        //Android: este s.o. puede matar un proceso que quede en segundo plano en cualquier mmomento
-
-        //Tipicamente:
-        // MICLASEViewModel vmodel = new ViewModelProvider(this).get(MICLASEViewModel.class);
         MoviesViewModel vmodel = new ViewModelProvider(this).get(MoviesViewModel.class);
 
-        //RecyclerView (es una lista de resultados) contendrá los trending movies o series
-        //Para ello usamos el patrón Observer (Implementado por todas las clases que heredan de
-        //ViewModel
-        //Estructura: viewmodelobject.getResults().observe(activity, listadecosasamostrar -> {
-        //    proceso de actualización del RecyclerView (Lambda function/method)
-        // });
         vmodel.getResults().observe(this, movieSerieItems -> {
-            // update UI
-            // Cogemos el RV (RecyclerView)
             RecyclerView mRecyclerView = findViewById(R.id.rvMain);
-            // Creamos un adapter con un enlace a la activity y a los datos a usar
             MoviesSeriesRVAdapter mAdapter = new MoviesSeriesRVAdapter(this, movieSerieItems);
-            // Conectamos el adapter y el RV
             mRecyclerView.setAdapter(mAdapter);
-            // Asignamos al RV un tipo de layout manager por defecto: típicamente el LinearLayoutManager
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+            updatePagina(vmodel.getPagina()); // Actualizamos el número de página
+            totalPaguina(vmodel.getTotalPag());
         });
 
-
-        //Ahora toca programar los botones
-        //Pelis
-        Button bMovie = (Button) findViewById(R.id.btSearchMovies);
-
-        bMovie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Cuando pulsan el botón movies, le decimos al viewmodel que cargue pelis
-                vmodel.loadData(RequestClient.TipoBusqueda.MOVIES);
-            }
+        Button bMovie = findViewById(R.id.btSearchMovies);
+        bMovie.setOnClickListener(v -> {
+            vmodel.loadData(RequestClient.TipoBusqueda.MOVIES);
+            updatePagina(vmodel.getPagina()); // Actualizamos el número de página
         });
 
+        Button bSeries = findViewById(R.id.btSearchSeries);
+        bSeries.setOnClickListener(v -> vmodel.loadData(RequestClient.TipoBusqueda.SERIES));
 
-        //Ahora el botón de las series
-        Button bSeries = (Button) findViewById(R.id.btSearchSeries);
-
-        bSeries.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vmodel.loadData(RequestClient.TipoBusqueda.SERIES);
-            }
+        Button siguiente = findViewById(R.id.botonsiguiente);
+        siguiente.setOnClickListener(v -> {
+            vmodel.siguientePag();
+            updatePagina(vmodel.getPagina()); // Actualizamos el número de página
         });
 
+        Button anterior = findViewById(R.id.botonatras);
+        anterior.setOnClickListener(v -> {
+            vmodel.antPag();
+            updatePagina(vmodel.getPagina()); // Actualizamos el número de página
+        });
 
+        Button avanzar = findViewById(R.id.avanzartres);
+        avanzar.setOnClickListener(v -> {
+            vmodel.avanzarPag();
+            updatePagina(vmodel.getPagina()); // Actualizamos el número de página
+        });
 
+        Button retroceder = findViewById(R.id.retrocedertres);
+        retroceder.setOnClickListener(v -> {
+            vmodel.siguientePag();
+            updatePagina(vmodel.getPagina()); // Actualizamos el número de página
+        });
+
+    Button verde = findViewById(R.id.verde);
+    verde.setOnClickListener( v -> {
+    bSeries.setBackgroundColor(Color.GREEN);
+    bMovie.setBackgroundColor(Color.GREEN);
+    anterior.setBackgroundColor(Color.GREEN);
+    siguiente.setBackgroundColor(Color.GREEN);
+
+    });
+
+    Button rojo = findViewById(R.id.rojo);
+    rojo.setOnClickListener( v -> {
+        bSeries.setBackgroundColor(Color.RED);
+        bMovie.setBackgroundColor(Color.RED);
+        anterior.setBackgroundColor(Color.RED);
+        siguiente.setBackgroundColor(Color.RED);
+    });
+
+    }
+
+    private void updatePagina(int pagina) {
+        TextView Pag = findViewById(R.id.Pagina);
+        Pag.setText("Página: " + pagina); // Método para actualizar el texto del número de página
+    }
+
+    private void totalPaguina(int totalPaginas) {
+        Button total = findViewById(R.id.total);
+        total.setText("Total de Páginas: " + totalPaginas); // Método para actualizar el texto del número total de páginas
     }
 }
